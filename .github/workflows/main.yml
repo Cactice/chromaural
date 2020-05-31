@@ -1,7 +1,8 @@
 name: CI
 on:
   push:
-    branches: gh-pages
+    branches: 
+      - 'gh-pages'
 jobs:
   lhci:
     name: Lighthouse
