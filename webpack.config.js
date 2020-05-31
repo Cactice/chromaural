@@ -2,6 +2,7 @@ const lodash = require('lodash');
 const CopyPkgJsonPlugin = require('copy-pkg-json-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 function srcPaths(src) {
   return path.join(__dirname, src);
@@ -14,7 +15,9 @@ const isEnvDevelopment = process.env.NODE_ENV === 'development';
 const commonConfig = {
   devtool: isEnvDevelopment ? 'source-map' : false,
   mode: isEnvProduction ? 'production' : 'development',
-  output: { path: srcPaths('dist') },
+  output: {
+    path: srcPaths('dist'),
+  },
   node: { __dirname: false, __filename: false },
   resolve: {
     alias: {
@@ -75,6 +78,11 @@ rendererConfig.output.filename = 'renderer.bundle.js';
 rendererConfig.plugins = [
   new HtmlWebpackPlugin({
     template: path.resolve(__dirname, './public/index.html'),
+  }),
+  new CopyWebpackPlugin({
+    patterns: [
+      { from: 'static' },
+    ],
   }),
 ];
 
