@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: 
+    branches:
       - 'gh-pages'
 jobs:
   lhci:
@@ -13,10 +13,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 10.x
-      - name: npm install, build
-        run: |
-          npm install
-          npm run build
       - name: run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.4.x
