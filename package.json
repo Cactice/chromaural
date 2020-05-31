@@ -1,0 +1,34 @@
+{
+	"name": "Chromaural",
+	"version": "0.0.1",
+	"description": "Deconstruct harmony",
+	"main": "./main.bundle.js",
+	"author": "Wing Chau @Devtography",
+	"license": "MIT",
+	"dependencies": {
+		"@types/react": "^16.9.35",
+		"@types/react-dom": "^16.9.8",
+		"node-hid": "^1.2.0",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Devtography/electron-react-typescript-webpack-boilerplate"
+	},
+	"keywords": [
+		"boilerplate",
+		"Electron",
+		"React",
+		"Typescript",
+		"Webpack"
+	],
+	"bugs": {
+		"url": "https://github.com/Devtography/electron-react-typescript-webpack-boilerplate/issues"
+	},
+	"homepage": "https://github.com/Devtography/electron-react-typescript-webpack-boilerplate#readme",
+	"scripts": {
+		"start": "electron ./main.bundle.js"
+	},
+	"postinstall": "electron-builder install-app-deps"
+}
