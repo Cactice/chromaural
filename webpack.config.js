@@ -3,6 +3,7 @@ const CopyPkgJsonPlugin = require('copy-pkg-json-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 function srcPaths(src) {
   return path.join(__dirname, src);
@@ -33,20 +34,51 @@ const commonConfig = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
-        loader: 'ts-loader',
-      },
-      {
-        test: /\.(scss|css)$/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
         test: /\.(jpg|png|svg|ico|icns)$/,
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]',
         },
+      },
+      {
+        test: /\.(jsx?|tsx?|css)$/,
+        include: path.resolve( __dirname, './' ),
+        exclude: /node_modules\/(?!(bulma)\/).*/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            "plugins": [
+              [
+                "styled-jsx/babel",
+                { "plugins": ["styled-jsx-plugin-less"] }
+              ]
+            ]
+          },
+        },
+      },
+      {
+        include: path.resolve( __dirname, './' ),
+        test: /\.css$/,
+        use: [
+            {
+                // eslint-disable-next-line global-require
+                loader: require('styled-jsx/webpack').loader
+            }
+        ]
+      },
+      {
+        test: /\.styl$/,
+        exclude: /node_modules\//,
+        use: [
+          'style-loader',
+          'css-loader',
+          'stylus-loader',
+        ],
+      },
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader',
       },
     ],
   },
@@ -80,9 +112,7 @@ rendererConfig.plugins = [
     template: path.resolve(__dirname, './public/index.html'),
   }),
   new CopyWebpackPlugin({
-    patterns: [
-      { from: 'static' },
-    ],
+    patterns: [{ from: 'static' }],
   }),
 ];
 
