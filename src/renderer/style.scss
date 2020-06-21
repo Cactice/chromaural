@@ -1,0 +1,11 @@
+@import 'bulma/bulma.sass';
+
+.device-table {
+  @extend .table;
+  span{
+    @extend .tag, .mr-3;
+  }
+  th{
+    background-color: $light;
+  }
+}
