@@ -1,8 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Device } from 'node-hid';
-import {DeviceTable} from "./deviceTable/deviceTable.tsx"
-import style from "./style.styl"
+import {DeviceTable} from "./multipleDevices/deviceTable.tsx"
+import style from "./style.scss"
 
 const userAgent = navigator.userAgent.toLowerCase();
 const isElectron = userAgent.indexOf(' electron/') > -1;
