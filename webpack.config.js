@@ -28,6 +28,7 @@ const commonConfig = {
       '@public': srcPaths('public'),
       '@renderer': srcPaths('src/renderer'),
       '@utils': srcPaths('src/utils'),
+      'react': path.resolve('./node_modules/react')
     },
     extensions: ['.js', '.json', '.ts', '.tsx'],
   },

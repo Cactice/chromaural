@@ -1,11 +1,39 @@
 @import 'bulma/bulma.sass';
+@import url('https://fonts.googleapis.com/css2?family=MuseoModerno:wght@800&display=swap');
 
+.main-navbar {
+  @extend .navbar;
+  background-color: $dark;
+  >div{
+    @extend .navbar-brand, .level;
+    img {
+      height: 100px
+    }
+    >h1 {
+      @extend .level-item, .is-size-1;
+      font-family: 'Archivo', sans-serif;
+      font-family: 'MuseoModerno', cursive;
+      background: linear-gradient(to right, #30CFD0 0%, #b198cf 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+
+
+.device-section {
+  @extend .section
+}
 .device-table {
   @extend .table;
+  td:not(.height-definition){
+    @extend .is-vcentered;
+  }
+
   span{
     @extend .tag, .mr-3;
   }
-  th{
-    background-color: $light;
+  button{
+    @extend .button, .is-success
   }
 }

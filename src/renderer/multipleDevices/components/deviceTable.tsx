@@ -1,7 +1,7 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React, { useEffect, useState } from 'react';
 import { Device } from 'node-hid';
-import style from '../style.styl';
+import { Navbar } from './navbar';
+import style from '../style.scss';
 
 type keyOfDevice = keyof Device;
 const desiredKeys: keyOfDevice[] = [
@@ -9,10 +9,10 @@ const desiredKeys: keyOfDevice[] = [
   'productId',
   'manufacturer',
   'product',
-  'interface',
   'path',
+  'interface',
 ];
-const displayDesiredKeys = desiredKeys.slice(2)
+const displayDesiredKeys = desiredKeys.slice(2);
 
 const filterAndSortDeviceKeys = (device: Device) => {
   const filtered = Object.assign(
@@ -31,16 +31,24 @@ const Row = (device: Device) =>
           switch (desiredKeys[index]) {
             case 'vendorId':
             case 'productId':
-              return <></>
+              return <></>;
             case 'interface':
               return (
                 <td>
-                  <button type="button" className="button is-success">Try</button>
+                  <button type="button">
+                    Try
+                    {(()=> {
+                      if(!val){return '👍' }
+                      if(Number(val)>0){return '💁'}
+                      return'😷'
+                    }
+                    )()}
+                  </button>
                 </td>
-)
+              );
             case 'path':
               return (
-                <td>
+                <td className="height-definition">
                   {val.split('/').map((substring) => (
                     <span className="device-table__span">{substring}</span>
                   ))}
@@ -52,15 +60,13 @@ const Row = (device: Device) =>
                   {val.split('/').map((substring) => {
                     if (substring === '') {
                       return (
-                        <>
-                          <span className="is-warning is-light">
-                            Unknown device
-                          </span>
-                        </>
+                        <span className="is-warning is-light is-medium">
+                          Unknown device
+                        </span>
                       );
                     }
                     return (
-                      <span className="is-info is-light">{substring}</span>
+                      <span className="is-info is-light is-medium">{substring}</span>
                     );
                   })}
                 </td>
@@ -73,23 +79,32 @@ const Row = (device: Device) =>
     )
   );
 
-export const DeviceTable = (devices: Device[]) => {
+export const DeviceTable = () => {
+  const [devices, setDevices] = useState<Device[]>();
+
+  useEffect(() => {
+    (async () => {
+      const HID = await import('node-hid');
+      setDevices(HID.devices());
+    })()
+  },[]);
   return (
-    <div className="app">
-      <table className="device-table">
-        <thead>
-          <tr>
-            {displayDesiredKeys.map((key) => (
-              <th>{key}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {devices.map((device) => (
-            <tr>{Row(device)}</tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <table className="device-table">
+      <thead>
+        <tr>
+          {displayDesiredKeys.map((key) => (
+            <th>{key}</th>
+              ))}
+        </tr>
+      </thead>
+      <tbody>
+        {typeof devices !== 'undefined'
+              ? devices.map((device) => <tr>{Row(device)}</tr>)
+              : null}
+      </tbody>
+    </table>
   );
 };
+
+// eslint-disable-next-line import/no-default-export
+export default DeviceTable
