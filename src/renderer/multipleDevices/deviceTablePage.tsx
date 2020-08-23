@@ -3,6 +3,7 @@ import React, {Suspense, lazy} from 'react'
 import {Navbar} from './components/navbar'
 
 const LazyTable = lazy(() => import ('./components/deviceTable'))
+// this lazy loading is unnecessary I just wanted to try lazy
 
 export const MultipleDevices = () => {
   return (
