@@ -37,7 +37,9 @@
     "@types/react-dom": "^16.9.8",
     "bulma": "^0.9.0",
     "bulma-stylus": "^0.8.1-rc.2",
+    "glslify-loader": "^2.0.0",
     "node-hid": "^1.2.0",
+    "raw-loader": "^4.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "styled-jsx": "^3.3.0"

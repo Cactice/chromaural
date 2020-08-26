@@ -35,6 +35,14 @@ const commonConfig = {
   module: {
     rules: [
       {
+        test: /\.(glsl|vs|fs|vert|frag)$/,
+        exclude: /node_modules/,
+        use: [
+          'raw-loader',
+          'glslify-loader'
+        ]
+      },
+      {
         test: /\.(jpg|png|svg|ico|icns)$/,
         loader: 'file-loader',
         options: {

@@ -1,5 +1,6 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
 // import { layout } from './keyboardLayout'
+import fragStr from "./shader.frag"
 
 const initCanvas = (canvas: HTMLCanvasElement) => {
   const gl = canvas.getContext('webgl')
@@ -22,6 +23,7 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
     return
   }
   gl.shaderSource(fragShader, 'void main(void){gl_FragColor=vec4(0,1,1,1);}')
+  gl.shaderSource(fragShader, fragStr)
   gl.compileShader(fragShader)
   const prog = gl.createProgram()
   if (!prog) {
