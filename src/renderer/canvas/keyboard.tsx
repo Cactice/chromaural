@@ -1,6 +1,6 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
 // import { layout } from './keyboardLayout'
-import fragStr from "./shader.frag"
+import fragStr from './shader.frag'
 
 const initCanvas = (canvas: HTMLCanvasElement) => {
   const gl = canvas.getContext('webgl')
@@ -22,7 +22,6 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   if (!fragShader) {
     return
   }
-  gl.shaderSource(fragShader, 'void main(void){gl_FragColor=vec4(0,1,1,1);}')
   gl.shaderSource(fragShader, fragStr)
   gl.compileShader(fragShader)
   const prog = gl.createProgram()
@@ -33,6 +32,10 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   gl.attachShader(prog, fragShader)
   gl.linkProgram(prog)
   gl.useProgram(prog)
+  const keyboardList = gl.getUniformLocation(prog, 'u_keyboardList')
+  gl.uniform3f(keyboardList, 0.4, 0.9, 0.3)
+  console.log(gl.getShaderInfoLog(fragShader))
+  console.log(gl.getProgramInfoLog(prog))
 
   gl.clearColor(1, 0, 1, 1)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -42,8 +45,26 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuf)
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array([-0.5, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0,
-      -0.5, 0.5, 0.0, 0.5, 0.5, 0.0, 0.5, -0.5, 0.0,]),
+    new Float32Array([
+      -0.5,
+      0.5,
+      0.0,
+      -0.5,
+      -0.5,
+      0.0,
+      0.5,
+      -0.5,
+      0.0,
+      -0.5,
+      0.5,
+      0.0,
+      0.5,
+      0.5,
+      0.0,
+      0.5,
+      -0.5,
+      0.0,
+    ]),
     gl.STATIC_DRAW
   )
 

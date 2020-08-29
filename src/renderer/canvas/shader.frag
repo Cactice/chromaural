@@ -1,1 +1,5 @@
-void main(void){gl_FragColor=vec4(0,0.4,1,1);}
+uniform mediump vec3 u_keyboardList;
+
+void main(void){
+  gl_FragColor=vec4(u_keyboardList,1);
+}

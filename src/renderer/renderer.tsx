@@ -16,14 +16,6 @@ function Example() {
 
   return (
     <div className="app">
-      <p>
-        You clicked
-        {count}
-        times
-      </p>
-      <button type="button" onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
       <Keyboard />
     </div>
   )
