@@ -1,4 +1,7 @@
-export const layout = {
+// /arr.map((e)=>{next[e[0]]=Array.isArray(e[1])?e[1]:[e.slice(1)]})
+export const keyLayout: {
+  [key: number]: number[][]
+} = {
   '8': [[13, 1, 2, 1]],
   '9': [[0, 2, 1.5, 1]],
   '12': [[20, 3, 1, 1]],

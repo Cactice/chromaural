@@ -1,6 +1,10 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
+import { HandleKeyDown, HandleKeyUp,  } from './audio'
 // import { layout } from './keyboardLayout'
 import fragStr from './shader.frag'
+
+let keyboardList
+let timeLoc: WebGLUniformLocation
 
 const initCanvas = (canvas: HTMLCanvasElement) => {
   const gl = canvas.getContext('webgl')
@@ -32,10 +36,9 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   gl.attachShader(prog, fragShader)
   gl.linkProgram(prog)
   gl.useProgram(prog)
-  const keyboardList = gl.getUniformLocation(prog, 'u_keyboardList')
-  gl.uniform3f(keyboardList, 0.4, 0.9, 0.3)
-  console.log(gl.getShaderInfoLog(fragShader))
-  console.log(gl.getProgramInfoLog(prog))
+  timeLoc = gl.getUniformLocation(prog, 'u_time')!
+  keyboardList = gl.getUniformLocation(prog, 'u_keyboardList')
+  gl.uniform3fv(keyboardList, [0.4, 0.9, 0.3, 0.8, 0.9, 0.7])
 
   gl.clearColor(1, 0, 1, 1)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -72,7 +75,18 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0)
   gl.enableVertexAttribArray(coord)
 
-  gl.drawArrays(gl.TRIANGLE_FAN, 0, 6)
+  const renderLoop = (timeStamp: number) => {
+    // set time uniform
+    gl.uniform1f(timeLoc, timeStamp / 1000.0)
+
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 6)
+
+    // recursive invocation
+    window.requestAnimationFrame(renderLoop)
+  }
+
+  // start the loop
+  window.requestAnimationFrame(renderLoop)
 }
 
 export function Keyboard() {
@@ -85,6 +99,9 @@ export function Keyboard() {
       return
     }
     initCanvas(currentCanvas)
+    const body = document.getElementsByTagName('body')[0]
+    body.onkeydown = (event) => HandleKeyDown(event)
+    body.onkeyup = (event) => HandleKeyUp(event)
   }, [])
 
   return (
