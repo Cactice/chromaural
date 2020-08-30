@@ -1,10 +1,32 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
-import { HandleKeyDown, HandleKeyUp,  } from './audio'
+import { HandleKeyDown, HandleKeyUp } from './audio'
 // import { layout } from './keyboardLayout'
 import fragStr from './shader.frag'
 
-let keyboardList
+let keyboardListLoc: WebGLUniformLocation
+let keyboardList: number[] = []
 let timeLoc: WebGLUniformLocation
+let timeStamp: number
+const arr=    new Float32Array([
+  -1.0,
+  1.0,
+  0.0,
+  -1.0,
+  -1.0,
+  0.0,
+  1.0,
+  -1.0,
+  0.0,
+  -1.0,
+  1.0,
+  0.0,
+  1.0,
+  1.0,
+  0.0,
+  1.0,
+  -1.0,
+  0.0,
+])
 
 const initCanvas = (canvas: HTMLCanvasElement) => {
   const gl = canvas.getContext('webgl')
@@ -37,8 +59,9 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   gl.linkProgram(prog)
   gl.useProgram(prog)
   timeLoc = gl.getUniformLocation(prog, 'u_time')!
-  keyboardList = gl.getUniformLocation(prog, 'u_keyboardList')
-  gl.uniform3fv(keyboardList, [0.4, 0.9, 0.3, 0.8, 0.9, 0.7])
+  keyboardListLoc = gl.getUniformLocation(prog, 'u_keyboardList')!
+  console.log(gl.getShaderInfoLog(fragShader))
+  console.log(gl.getProgramInfoLog(prog))
 
   gl.clearColor(1, 0, 1, 1)
   gl.clear(gl.COLOR_BUFFER_BIT)
@@ -48,26 +71,7 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuf)
   gl.bufferData(
     gl.ARRAY_BUFFER,
-    new Float32Array([
-      -0.5,
-      0.5,
-      0.0,
-      -0.5,
-      -0.5,
-      0.0,
-      0.5,
-      -0.5,
-      0.0,
-      -0.5,
-      0.5,
-      0.0,
-      0.5,
-      0.5,
-      0.0,
-      0.5,
-      -0.5,
-      0.0,
-    ]),
+    arr,
     gl.STATIC_DRAW
   )
 
@@ -75,9 +79,12 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0)
   gl.enableVertexAttribArray(coord)
 
-  const renderLoop = (timeStamp: number) => {
+  const renderLoop = (newTimeStamp: number) => {
     // set time uniform
-    gl.uniform1f(timeLoc, timeStamp / 1000.0)
+
+    timeStamp = newTimeStamp / 1000.0
+    gl.uniform1f(timeLoc, timeStamp)
+    gl.uniform4fv(keyboardListLoc, keyboardList)
 
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 6)
 
@@ -100,13 +107,19 @@ export function Keyboard() {
     }
     initCanvas(currentCanvas)
     const body = document.getElementsByTagName('body')[0]
-    body.onkeydown = (event) => HandleKeyDown(event)
+    body.onkeydown = (event) => {
+      keyboardList = [
+        ...HandleKeyDown(event), // [x, y , pitch(hz)]
+        timeStamp,
+        ...keyboardList,
+      ].splice(0, 40)
+    }
     body.onkeyup = (event) => HandleKeyUp(event)
   }, [])
 
   return (
     <>
-      <canvas ref={canvas} width="640" height="480" />
+      <canvas ref={canvas} width="1280" height="480" />
     </>
   )
 }
