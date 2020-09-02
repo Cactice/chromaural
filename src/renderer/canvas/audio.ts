@@ -38,10 +38,6 @@ function playFreq(frequency: number) {
   }
 }
 
-function playNote(note: number) {
-  const frequency = noteToFreq[note - 24]
-  return playFreq(frequency)
-}
 function KeyCodeToKeyPosition(keyCode: number):number[] {
   const keyPositions = keyLayout[keyCode]
   const keyPosition = [...keyPositions[0]]
@@ -62,7 +58,7 @@ export function HandleKeyDown(event: KeyboardEvent):number[] {
   if (oscillatorArr[event.keyCode] == null) {
     oscillatorArr[event.keyCode] = playFreq(frequency)
   }
-  return [keyPosition[0]/5%1+1,keyPosition[1]/3, Math.log2(frequency/110)]
+  return [keyPosition[0]/5.5-1,keyPosition[1]/1.5-1, Math.log2(frequency/110)]
 }
 
 export function HandleKeyUp(event: KeyboardEvent) {

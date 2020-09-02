@@ -3,11 +3,15 @@ import { HandleKeyDown, HandleKeyUp } from './audio'
 // import { layout } from './keyboardLayout'
 import fragStr from './shader.frag'
 
+let isonfocus = true
+window.onblur = () => {
+  isonfocus = false
+}
 let keyboardListLoc: WebGLUniformLocation
 let keyboardList: number[] = []
 let timeLoc: WebGLUniformLocation
 let timeStamp: number
-const arr=    new Float32Array([
+const arr = new Float32Array([
   -1.0,
   1.0,
   0.0,
@@ -69,11 +73,7 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   const vertexBuf = gl.createBuffer()
 
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuf)
-  gl.bufferData(
-    gl.ARRAY_BUFFER,
-    arr,
-    gl.STATIC_DRAW
-  )
+  gl.bufferData(gl.ARRAY_BUFFER, arr, gl.STATIC_DRAW)
 
   const coord = gl.getAttribLocation(prog, 'c')
   gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0)
@@ -89,11 +89,17 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 6)
 
     // recursive invocation
-    window.requestAnimationFrame(renderLoop)
+    if (isonfocus) {
+      window.requestAnimationFrame(renderLoop)
+    }
   }
 
   // start the loop
   window.requestAnimationFrame(renderLoop)
+  window.onfocus = () => {
+    isonfocus = true
+    window.requestAnimationFrame(renderLoop)
+  }
 }
 
 export function Keyboard() {
@@ -109,17 +115,20 @@ export function Keyboard() {
     const body = document.getElementsByTagName('body')[0]
     body.onkeydown = (event) => {
       keyboardList = [
-        ...HandleKeyDown(event), // [x, y , pitch(hz)]
+        ...HandleKeyDown(event), // [x, y, pitch(hz)]
         timeStamp,
         ...keyboardList,
-      ].splice(0, 40)
+      ].splice(0, 160)
+      console.log(keyboardList.slice(0, 3))
     }
     body.onkeyup = (event) => HandleKeyUp(event)
   }, [])
 
   return (
     <>
-      <canvas ref={canvas} width="1280" height="480" />
+      <center>
+        <canvas ref={canvas} width="640" height="640" />
+      </center>
     </>
   )
 }

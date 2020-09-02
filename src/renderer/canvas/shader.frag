@@ -10,20 +10,39 @@ vec3 hsv2rgb(vec3 c){
 
 void main(void){
 
-  gl_FragColor=vec4(1.);
-  float lastPitch=0.;
-  for(int i=0;i<40;i++){
+  vec4 overlappingColor[40];
+
+  for(int i=40;i>=0;i--){
+    if(u_keyboardList[i]==vec4(0.)){continue;}
     float time=u_keyboardList[i].w;
-    float xDiff=distance(gl_FragCoord.x/640.,u_keyboardList[i].x);
-    float yDiff=distance(gl_FragCoord.y/480.,u_keyboardList[i].y);
-    float circle=cos(xDiff*3.1)*sin(yDiff*3.1);
+    float timeDiff=distance(u_time,time);
+    float radius=distance(u_keyboardList[i].xy,gl_PointCoord.xy);
     if(
-      circle<-(u_time-time)+.1
+      radius<timeDiff
     ){
       float pitch=u_keyboardList[i].z;
-      lastPitch=pitch;
-      vec3 rgb=hsv2rgb(vec3(mod(pitch,1.),u_time-time,0.8));
-      gl_FragColor=vec4(rgb,1.);
+      float wheeledPitch=mod(pitch*7.,1.);
+      overlappingColor[i].x=wheeledPitch;
+      overlappingColor[i].y=max(.7-timeDiff/4.,0.);
+      overlappingColor[i].w=1.;
     }
   }
+
+  vec3 sumHsv=vec3(0.);
+  float lastHue=-1.;
+  for(int i=10;i>=0;i--){
+    if(overlappingColor[i].w!=1.){continue;}
+    sumHsv.y+=distance(overlappingColor[i].x,lastHue);
+    if(lastHue!=-1.){
+      sumHsv.x=overlappingColor[i].x;
+      sumHsv.z=
+        distance(lastHue,overlappingColor[i].x);
+    }
+    else{
+      sumHsv.x=overlappingColor[i].x;
+    }
+    lastHue=overlappingColor[i].x;
+  }
+  vec3 rgb=hsv2rgb(vec3(sumHsv.x,sumHsv.y/5.,1.));
+  gl_FragColor=vec4(rgb.x,rgb.y,rgb.z,1.);
 }
