@@ -1,10 +1,20 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
-import { HandleKeyDown, HandleKeyUp } from './audio'
+import MidiPlayer from 'midi-player-js'
+import { WebMidiEvents } from 'webmidi'
+import {
+  HandleKeyDown,
+  HandleKeyUp,
+  HandleMidiDown,
+  HandleMidiUp,
+} from './audio'
 // import { layout } from './keyboardLayout'
 import fragStr from './shader.frag'
+import zelda from './pixel.mid'
 
 let isonfocus = true
+let id = null
 window.onblur = () => {
+  window.cancelAnimationFrame(id)
   isonfocus = false
 }
 let keyboardListLoc: WebGLUniformLocation
@@ -95,11 +105,38 @@ const initCanvas = (canvas: HTMLCanvasElement) => {
   }
 
   // start the loop
-  window.requestAnimationFrame(renderLoop)
+  id = window.requestAnimationFrame(renderLoop)
   window.onfocus = () => {
     isonfocus = true
     window.requestAnimationFrame(renderLoop)
   }
+}
+
+const midiLoader = () => {
+  // Initialize player and register even handler
+  const Player = new MidiPlayer.Player((event: MidiPlayer.Event) => {
+    console.log(event)
+  })
+
+  // Load a MIDI file
+  Player.loadDataUri(zelda)
+  Player.on('midiEvent', (event: MidiPlayer.Event) => {
+    const { noteNumber, name, track } = event
+    console.log(noteNumber, track, name)
+    if (typeof noteNumber !== 'undefined' && typeof track !== 'undefined') {
+      if (name === 'Note on') {
+        keyboardList = [
+          ...HandleMidiDown(noteNumber, track), // [x, y, pitch(hz)]
+          timeStamp,
+          ...keyboardList,
+        ].splice(0, 160)
+      } else if (name === 'Note off') {
+        HandleMidiUp(noteNumber, track)
+      }
+    }
+  })
+
+  Player.play()
 }
 
 export function Keyboard() {
@@ -126,9 +163,7 @@ export function Keyboard() {
 
   return (
     <>
-      <center>
-        <canvas ref={canvas} width="640" height="640" />
-      </center>
+      <canvas ref={canvas} width="640" height="640" />
     </>
   )
 }

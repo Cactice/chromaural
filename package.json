@@ -38,11 +38,14 @@
     "bulma": "^0.9.0",
     "bulma-stylus": "^0.8.1-rc.2",
     "glslify-loader": "^2.0.0",
+    "midi-player-js": "^2.0.13",
     "node-hid": "^1.2.0",
     "raw-loader": "^4.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "styled-jsx": "^3.3.0"
+    "styled-jsx": "^3.3.0",
+    "url-loader": "^4.1.0",
+    "webmidi": "^2.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.11.5",

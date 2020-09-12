@@ -19,7 +19,7 @@ const commonConfig = {
   output: {
     path: srcPaths('dist'),
   },
-  node: { __dirname: false, __filename: false },
+  node: { __dirname: false, __filename: false, fs: 'empty' },
   resolve: {
     alias: {
       '@': srcPaths('src'),
@@ -93,6 +93,10 @@ const commonConfig = {
           // Compiles Sass to CSS
           'sass-loader',
         ],
+      },
+      {
+        test: /\.midi?$/,
+        use: ['url-loader']
       },
       {
         test: /\.(ts|tsx)$/,
