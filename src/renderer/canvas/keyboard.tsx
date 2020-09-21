@@ -12,7 +12,7 @@ import fragStr from './shader.frag'
 import zelda from './pixel.mid'
 
 let isonfocus = true
-let id = null
+let id:number = 0
 window.onblur = () => {
   window.cancelAnimationFrame(id)
   isonfocus = false
