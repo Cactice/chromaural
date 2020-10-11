@@ -1,5 +1,5 @@
 {
-  "name": "Chromaural",
+  "name": "chromaural",
   "version": "0.0.1",
   "description": "Deconstruct harmony",
   "main": "./dist/main.bundle.js",
@@ -29,7 +29,7 @@
     },
     "buildVersion": "1.0.0"
   },
-  "author": "Wing Chau @Devtography",
+  "author": "Cactice",
   "license": "MIT",
   "dependencies": {
     "@types/node-hid": "^1.2.0",
