@@ -139,4 +139,10 @@ rendererConfig.plugins = [
   }),
 ];
 
-module.exports = [mainConfig, rendererConfig];
+const pluginConfig = lodash.cloneDeep(commonConfig);
+pluginConfig.entry = {
+  background: './src/plugin/background.ts',
+  content: './src/plugin/content.ts',
+};
+
+module.exports = [mainConfig, rendererConfig, pluginConfig];

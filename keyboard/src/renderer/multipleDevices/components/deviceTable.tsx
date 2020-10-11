@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Device } from 'node-hid'
 import { Navbar } from './navbar'
-import style from '../style.scss'
 
 type keyOfDevice = keyof Device
 const desiredKeys: keyOfDevice[] = [

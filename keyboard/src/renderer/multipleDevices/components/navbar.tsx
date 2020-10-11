@@ -1,5 +1,4 @@
 import * as React from 'react';
-import logo from './logo.png';
 
 export const Navbar = () => (
   <nav className="main-navbar" role="navigation" aria-label="main navigation">
