@@ -3,7 +3,6 @@ const CopyPkgJsonPlugin = require('copy-pkg-json-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 function srcPaths(src) {
   return path.join(__dirname, src);
@@ -142,7 +141,7 @@ rendererConfig.plugins = [
 const pluginConfig = lodash.cloneDeep(commonConfig);
 pluginConfig.entry = {
   background: './src/plugin/background.ts',
-  content: './src/plugin/content.ts',
+  content: './src/plugin/content.tsx',
 };
 
 module.exports = [mainConfig, rendererConfig, pluginConfig];

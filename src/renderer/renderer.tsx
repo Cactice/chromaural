@@ -11,9 +11,6 @@ const isElectron = userAgent.indexOf(' electron/') > -1
 // Import the styles here to process them with webpack
 
 function Example() {
-  // Declare a new state variable, which we'll call "count"
-  const [count, setCount] = useState(0)
-
   return (
     <div className="app">
       <Keyboard />
