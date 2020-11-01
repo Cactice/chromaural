@@ -8,7 +8,6 @@ import {
 } from './audio'
 // import { layout } from './keyboardLayout'
 import fragStr from './shader.frag'
-import zelda from './pixel.mid'
 
 let isonfocus = true
 let id:number = 0
