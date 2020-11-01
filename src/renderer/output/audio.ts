@@ -1,5 +1,5 @@
-import { keyLayout } from './keyboardLayout'
-import { noteToFreq } from './noteToFreq'
+import { KeyCodeToKeyPosition, KeyPositionToNote } from "../input/keydown"
+import { noteToFreq } from "../input/noteToFreq"
 
 const midiOscillatorArr = [
   Array(300),
@@ -8,10 +8,12 @@ const midiOscillatorArr = [
   Array(300),
   Array(300),
 ]
+
 const oscillatorArr = Array(200)
 const audioCtx = new (window.AudioContext ||
   ((window as any).webkitAudioContext as AudioContext))()
 const volume = audioCtx.createGain()
+
 volume.connect(audioCtx.destination)
 volume.gain.value = 0.3
 
@@ -41,43 +43,7 @@ function playFreq(frequency: number) {
     oscillator.stop()
   }
 }
-
-function KeyCodeToKeyPosition(keyCode: number): number[] {
-  const keyPositions = keyLayout[keyCode]
-  const keyPosition = [...keyPositions[0]]
-  return keyPosition
-}
-export function HandleMidiDown(note: number, channel: number): number[] {
-  const keyPosition = []
-  keyPosition.push((note % 24) / 2)
-  keyPosition.push(note % 3)
-  const frequency = noteToFreq[note - 24]
-  if (midiOscillatorArr[channel][note] == null) {
-    midiOscillatorArr[channel][note] = playFreq(frequency)
-  }
-  return [
-    keyPosition[0] / 5.5 - 1,
-    keyPosition[1] / 1.5 - 1,
-    Math.log2(frequency / 110),
-  ]
-}
-
-export function HandleMidiUp(note: number, channel: number) {
-  if (typeof midiOscillatorArr[channel][note] === 'function') {
-    midiOscillatorArr[channel][note]()
-    midiOscillatorArr[channel][note] = null
-  }
-}
-
-function KeyPositionToNote(keyPosition: number[]) {
-  const keyPositionCopy = keyPosition
-  keyPositionCopy[0] = Math.floor(keyPosition[0])
-  keyPositionCopy[0] = keyPosition[1] <= 2 ? keyPosition[0] : keyPosition[0] - 1
-  keyPositionCopy[1] = 4 - keyPosition[1]
-  const noteNumber = 61 + keyPosition[0] * 3 + keyPosition[1] // z is C4
-  return noteNumber
-}
-export function HandleKeyDown(event: KeyboardEvent): number[] {
+export function handleKeyDown(event: KeyboardEvent): number[] {
   const keyPosition = KeyCodeToKeyPosition(event.keyCode)
   const note = KeyPositionToNote(keyPosition)
   const frequency = noteToFreq[note - 24]
@@ -91,7 +57,7 @@ export function HandleKeyDown(event: KeyboardEvent): number[] {
   ]
 }
 
-export function HandleKeyUp(event: KeyboardEvent) {
+export function handleKeyUp(event: KeyboardEvent) {
   oscillatorArr[event.keyCode]()
   oscillatorArr[event.keyCode] = null
 }

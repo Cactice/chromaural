@@ -7,17 +7,21 @@
 4th layer: Infra
 
 - Notes
-  - Input
-    - Midi
-    - Audio(from video element)
-    - Keydown
-    - MultiKeyboard Keydown
-  - Output
-    - Midi
-    - Audio
-    - Canvas
-      - WebGL
-      - Shader Algorithm
+  - Play
+  - Pause
+- Input
+  - Midi File?
+  - Midi input
+  - Audio(from video element)
+  - Keydown
+  - MultiKeyboard Keydown
+  - Mouse
+- Output
+  - Midi
+  - Audio
+  - Canvas
+    - WebGL
+    - Shader Algorithm
 
 
 ### Features

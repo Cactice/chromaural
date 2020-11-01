@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { DeviceTable } from './multipleDevices/components/deviceTable'
 import style from './style.scss'
 import { MultipleDevices } from './multipleDevices/deviceTablePage'
-import {Keyboard} from './canvas/keyboard'
+import {Canvas} from './output/canvas'
 
 const userAgent = navigator.userAgent.toLowerCase()
 const isElectron = userAgent.indexOf(' electron/') > -1
@@ -13,7 +13,7 @@ const isElectron = userAgent.indexOf(' electron/') > -1
 function Example() {
   return (
     <div className="app">
-      <Keyboard />
+      <Canvas />
     </div>
   )
 }

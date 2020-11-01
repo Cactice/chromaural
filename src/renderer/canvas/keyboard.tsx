@@ -1,6 +1,5 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
 import MidiPlayer from 'midi-player-js'
-import { WebMidiEvents } from 'webmidi'
 import {
   HandleKeyDown,
   HandleKeyUp,
