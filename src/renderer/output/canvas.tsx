@@ -5,11 +5,7 @@ import { initCanvas } from './initCanvas'
 
 let keyboardList: number[] = []
 let timestamp: number = 0
-let gl: WebGLRenderingContext
-let glLocations: {
-  keyboardListLoc: WebGLUniformLocation
-  timeLoc: WebGLUniformLocation
-}
+
 export function Canvas() {
   // Declare a new state variable, which we'll call "count"
   const canvas = useRef(null)

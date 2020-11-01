@@ -31,7 +31,9 @@ const arr = new Float32Array([
 
 export const initCanvas = (
   canvas: HTMLCanvasElement,
-  updateTimestamp: (newTimeStamp: number) => {timestamp:number, keyboardList:number[]}
+  updateTimestamp: (
+    newTimeStamp: number
+  ) => { timestamp: number; keyboardList: number[] }
 ):
   | {
       gl: WebGLRenderingContext
@@ -90,7 +92,7 @@ export const initCanvas = (
   const renderLoop = (newTimestamp: number) => {
     // set time uniform
 
-    const {timestamp, keyboardList} = updateTimestamp(newTimestamp)
+    const { timestamp, keyboardList } = updateTimestamp(newTimestamp)
     gl.uniform1f(timeLoc, timestamp)
     gl.uniform4fv(keyboardListLoc, keyboardList)
 

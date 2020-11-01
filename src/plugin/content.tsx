@@ -1,6 +1,6 @@
 import React from 'react'
 import * as ReactDOM from 'react-dom'
-import { Keyboard } from '../renderer/canvas/keyboard'
+import { Canvas } from '../renderer/output/canvas'
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse): boolean => {
   // If the received message has the expected format...
@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse): boolean => {
       const parent: Node | null = video.parentNode
       if (parent) {
         parent.insertBefore(node, video.nextSibling)
-        ReactDOM.render(<Keyboard />, document.getElementById('app'))
+        ReactDOM.render(<Canvas />, document.getElementById('app'))
       }
     }
     sendResponse(document)
