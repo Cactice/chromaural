@@ -1,11 +1,5 @@
 import fragStr from './shader.frag'
 
-let isonfocus = true
-let id: number = 0
-window.onblur = () => {
-  window.cancelAnimationFrame(id)
-  isonfocus = false
-}
 let keyboardListLoc: WebGLUniformLocation
 let timeLoc: WebGLUniformLocation
 const arr = new Float32Array([
@@ -99,17 +93,11 @@ export const initCanvas = (
     gl.drawArrays(gl.TRIANGLE_FAN, 0, 6)
 
     // recursive invocation
-    if (isonfocus) {
       window.requestAnimationFrame(renderLoop)
-    }
   }
 
   // start the loop
-  id = window.requestAnimationFrame(renderLoop)
-  window.onfocus = () => {
-    isonfocus = true
-    window.requestAnimationFrame(renderLoop)
-  }
+  window.requestAnimationFrame(renderLoop)
   const glLocations = { keyboardListLoc, timeLoc }
   return { gl, glLocations }
 }
